@@ -1,0 +1,408 @@
+﻿<Window x:Class="Reel_A_StateWpfPresentation.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Reel_A_StateWpfPresentation.Views"
+        mc:Ignorable="d"
+        Title="Reel A State" 
+        Height="650" 
+        Width="1200"
+        Background="Gray"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <Style x:Key="InsideBorderStyle" TargetType="Border">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+        <Style x:Key="BorderStyle" TargetType="Border">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+        </Style>
+        <Style x:Key="HeaderStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="DarkBlue"/>
+            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Cursive"/>
+        </Style>
+        <Style x:Key="SubHeaderStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="DarkGoldenrod"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style x:Key="DetailLabelStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="DarkGoldenrod"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style x:Key="RadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="DarkBlue"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="Width" Value="135"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Foreground" Value="DarkSlateGray"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style x:Key="MainLabelStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="DarkBlue"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <Setter Property="Margin" Value="10,10,10,10"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Label
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Style="{StaticResource HeaderStyle}"
+            HorizontalAlignment="Center"
+            Content="Reel A State"/>
+        
+        <StackPanel
+            Grid.Column="1"
+            Grid.Row="2"
+            Orientation="Vertical">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                        Grid.Column="0"
+                        Margin="20,0,0,0"
+                        Orientation="Vertical">
+                    <Label Content="Sort By:" Style="{StaticResource LabelStyle}"/>
+                    <RadioButton 
+                            Name="RadioButton_PriceSort"
+                            Content="Price"
+                            Style="{StaticResource RadioButtonStyle}"
+                            IsChecked="True"
+                            Checked="RadioButton_Sort_Checked"/>
+                    <RadioButton 
+                            Name="RadioButton_BathroomSort"
+                            Content="Bathrooms"
+                            Style="{StaticResource RadioButtonStyle}"
+                            Checked="RadioButton_Sort_Checked"
+                            Command="{Binding Path=SortListByAgeCommand}"/>
+                </StackPanel>
+                <StackPanel
+                        Grid.Column="1"
+                        Margin="20,30,0,0"
+                        Orientation="Vertical">
+                   
+                    <RadioButton 
+                            Name="RadioButton_BedroomSort"
+                            Content="Bedrooom"
+                            Style="{StaticResource RadioButtonStyle}"
+                            Checked="RadioButton_Sort_Checked"
+                            Command="{Binding Path=SortListByBedroomCommand}"/>
+                    <RadioButton 
+                            Name="RadioButton_ZipSort"
+                            Content="Zip Code"
+                            Style="{StaticResource RadioButtonStyle}"
+                            Checked="RadioButton_Sort_Checked"
+                            Command="{Binding Path=SortListByZipCommand}"/>
+                </StackPanel>
+                <StackPanel
+                        Grid.Column="2"
+                        Margin="20,30,0,0"
+                        Orientation="Vertical">
+
+                    <RadioButton 
+                            Name="RadioButton_SqrFootSort"
+                            Content="Sqr Feet"
+                            Style="{StaticResource RadioButtonStyle}"
+                            Checked="RadioButton_Sort_Checked"
+                            Command="{Binding Path=SortListBySqrFeetCommand}"/>
+                    <RadioButton 
+                            Name="RadioButton_AcreSort"
+                            Content="Acres"
+                            Style="{StaticResource RadioButtonStyle}"
+                            Checked="RadioButton_Sort_Checked"
+                            Command="{Binding Path=SortListByAcresCommand}"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid
+                    Height="475">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="9*"/>
+                </Grid.ColumnDefinitions>
+                <ListBox 
+                    x:Name="List"
+                    Grid.Column="0"
+                    Margin="10,10,10,10"
+                    Background="WhiteSmoke"
+                    ItemsSource="{Binding EstateProperties}"
+                    SelectedItem="{Binding SelectedProperty, Mode=TwoWay}"
+                    IsSynchronizedWithCurrentItem="true"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.ColumnSpan="2">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <Border Margin="5" BorderBrush="Black" BorderThickness="1">
+                                    <Image 
+                                        Source="{Binding ImageFilePath}" 
+                                        Stretch="UniformToFill"  
+                                        Width="40" 
+                                        Height="40" />
+                                </Border>
+                                <Label
+                                    Content="{Binding Address}"
+                                    Width="150"
+                                    Style="{StaticResource LabelStyle}"/>
+                                <Label
+                                    Content="{Binding City }"
+                                    Padding="0,5"
+                                    Style="{StaticResource LabelStyle}"/>
+                                <Label
+                                    Content="{Binding Zipcode}"
+                                    Padding="0,5"
+                                    Style="{StaticResource LabelStyle}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </StackPanel>
+
+        <Border
+            Grid.Row="2"
+            Grid.Column="2"
+            Style="{StaticResource InsideBorderStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".6*"/>
+                    <RowDefinition Height=".4*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width=".3*"/>
+                    <ColumnDefinition Width=".70*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0">
+                    <StackPanel
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <Label
+                        Content="Address:"
+                        Style="{StaticResource MainLabelStyle}"/>
+                        <TextBox
+                            Text="{Binding SelectedProperty.Address}"
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <StackPanel
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <Label
+                        Content="City:"
+                        Style="{StaticResource MainLabelStyle}"/>
+                        <TextBox
+                            Text="{Binding SelectedProperty.City}"
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <StackPanel
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <Label
+                        Content="State:"
+                        Style="{StaticResource MainLabelStyle}"/>
+                        <TextBox
+                            Text="{Binding SelectedProperty.State}"
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <StackPanel
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <Label
+                        Content="Zip Code:"
+                        Style="{StaticResource MainLabelStyle}"/>
+                        <TextBox
+                            Text="{Binding SelectedProperty.Zipcode}"
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <StackPanel
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <Label
+                        Content="Bedrooms:"
+                        Style="{StaticResource MainLabelStyle}"/>
+                        <TextBox
+                            Text="{Binding SelectedProperty.Bedrooms}"
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <StackPanel
+                        HorizontalAlignment="right"
+                        Orientation="Horizontal">
+                        <Label
+                        Content="Bathrooms:"
+                        Style="{StaticResource MainLabelStyle}"/>
+                        <TextBox
+                            Text="{Binding SelectedProperty.Bathrooms}"
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <StackPanel
+                        HorizontalAlignment="right"
+                        Orientation="Horizontal">
+                        <Label
+                        Content="Sqr Feet:"
+                        Style="{StaticResource MainLabelStyle}"/>
+                        <TextBox
+                            Text="{Binding SelectedProperty.SqrFeet}"
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <StackPanel
+                        HorizontalAlignment="right"
+                        Orientation="Horizontal">
+                        <Label
+                        Content="Fireplace:"
+                        Style="{StaticResource MainLabelStyle}"/>
+                        <TextBox
+                            Text="{Binding SelectedProperty.Fireplace}"
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <StackPanel
+                        HorizontalAlignment="right"
+                        Orientation="Horizontal">
+                        <Label
+                        Content="Pool:"
+                        Style="{StaticResource MainLabelStyle}"/>
+                        <TextBox
+                            Text="{Binding SelectedProperty.Pool}"
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1">
+                    <StackPanel
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                        <Image
+                            Margin="7,7,0,0"
+                            Height="200"
+                            Width="200"
+                            Source="{Binding SelectedProperty.ImageFilePath1}"/>
+                        <Image
+                            Margin="7,7,0,0"
+                            Height="200"
+                            Width="200"
+                            Source="{Binding SelectedProperty.ImageFilePath1}"/>
+                    </StackPanel>
+                    <StackPanel 
+                        Orientation="Vertical"
+                        HorizontalAlignment="Center">
+                        <Label 
+                            HorizontalAlignment="Left"
+                            Content="Description: " 
+                            Style="{StaticResource MainLabelStyle}"/>
+                        <TextBox
+                            HorizontalAlignment="Left"
+                            Width="500"
+                            Height="100"
+                            TextWrapping="Wrap"
+                            AcceptsReturn="True"
+                            VerticalContentAlignment="Top"
+                            VerticalScrollBarVisibility="Visible"
+                            Text="{Binding SelectedProperty.Description}" 
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2">
+                    <StackPanel 
+                        Orientation="Vertical"
+                        HorizontalAlignment="right"
+                        Margin="0,0,25,0">                        
+                        <Label 
+                            HorizontalAlignment="Left"
+                            Content="Comments: " 
+                            Style="{StaticResource MainLabelStyle}"/>
+                        <TextBox
+                            HorizontalAlignment="Left"
+                            Width="500"
+                            Height="100"
+                            TextWrapping="Wrap"
+                            AcceptsReturn="True"
+                            VerticalContentAlignment="Top"
+                            VerticalScrollBarVisibility="Visible"
+                            Text="{Binding SelectedProperty.Comment}" 
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <StackPanel 
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">                        
+                        <Button 
+                            x:Name="Button_Add"   
+                            Content="Add"
+                            Style="{StaticResource ButtonStyle}"
+                            Command="{Binding Path=AddEstateCommand}"/>
+                        <Button 
+                            x:Name="Button_Delete"   
+                            Content="Delete"
+                            Style="{StaticResource ButtonStyle}"
+                            Command="{Binding Path=DeleteEstateCommand}"/>
+                        <Button 
+                            x:Name="Button_Edit"   
+                            Content="Edit"
+                            Style="{StaticResource ButtonStyle}"
+                            Command="{Binding Path=EditEstateCommand}"/>
+                        <Button 
+                            x:Name="Button_Quit"   
+                            Content="Quit"
+                            Style="{StaticResource ButtonStyle}"
+                            Click="Quit_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>
