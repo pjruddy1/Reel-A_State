@@ -79,9 +79,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
 
        
         public MainViewModel(MongoCRUD db)
-        {
-            //_estateProperties = db.LoadEstates<EstateProperties>("Estates");
+        {            
             db = new MongoCRUD("PropertyDB");
+            _estateProperties = db.LoadEstates<EstateProperties>("Estates");
         }
     }
 }
