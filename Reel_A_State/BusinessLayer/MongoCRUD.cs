@@ -21,18 +21,16 @@ namespace Reel_A_State.BusinessLayer
             db = client.GetDatabase(database);
         }
 
-        public void InsertEstate<T>(string table, T estate)
+        public void InsertEstate<EstateProperties>(string table, EstateProperties estate)
         {
-            var collection = db.GetCollection<T>(table);
+            var collection = db.GetCollection<EstateProperties>(table);
             collection.InsertOne(estate);
         }
 
-        public ObservableCollection<EstateProperties> LoadEstates<EstateProperties>(string table)
+        public List<T> LoadEstates<T>(string table)
         {
-            var collection = db.GetCollection<EstateProperties>(table);
-            collection.Find(new BsonDocument()).ToList();
-            ObservableCollection<EstateProperties> myCollection = new ObservableCollection<EstateProperties>(collection as List<EstateProperties>);
-            return myCollection;
+            var collection = db.GetCollection<T>(table);
+            return collection.Find(new BsonDocument()).ToList();
         }
 
         public void UpsertEstate<T>(string table, Guid id, T record)
@@ -49,9 +47,9 @@ namespace Reel_A_State.BusinessLayer
         {
             var collection = db.GetCollection<T>(table);
 
-            var deleteFilter = Builders<BsonDocument>.Filter.Eq("_id", id);
+            var filter = Builders<T>.Filter.Eq("Id", id);
 
-            //collection.DeleteOne(deleteFilter);
+            collection.DeleteOne(filter);
         }
     }
 }

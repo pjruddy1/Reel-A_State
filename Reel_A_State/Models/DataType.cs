@@ -9,6 +9,7 @@ namespace Reel_A_StateData.Models
     public enum DataType
     {
         XML,
-        JSON
+        JSON,
+        BSON
     }
 }

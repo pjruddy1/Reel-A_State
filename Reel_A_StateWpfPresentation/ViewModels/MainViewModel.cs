@@ -34,6 +34,20 @@ namespace Reel_A_StateWpfPresentation.ViewModels
 
         private void UpdateEstate()
         {
+            db = new MongoCRUD("PropertyDB");
+            db.UpsertEstate("Estates", _selectedProperty.Id, new EstateProperties
+            {
+                Address = _selectedProperty.Address,
+                Bathrooms = _selectedProperty.Bathrooms,
+                Bedrooms = _selectedProperty.Bedrooms,
+                City = _selectedProperty.City,
+                Description = _selectedProperty.Description,
+                Fireplace = _selectedProperty.Fireplace,
+                Pool = _selectedProperty.Pool,
+                Price = _selectedProperty.Price,
+                State = _selectedProperty.State,
+                Zipcode = _selectedProperty.Zipcode
+            });
             _estateProperties.Remove(_selectedProperty);
             _estateProperties.Add(_selectedProperty);
         }
@@ -41,12 +55,26 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         private void AddEstate()
         {
             db = new MongoCRUD("PropertyDB");
-            db.InsertEstate("Estates", new EstateProperties { Address = "yellow st", Bathrooms = 3, Bedrooms = 3, City = "THere", 
-                Description = "This is your place", Fireplace = false, Pool = false, Price = 50000, State = "MI", Zipcode = 49686 });
+            db.InsertEstate("Estates", new EstateProperties 
+            { 
+                Address = _selectedProperty.Address, 
+                Bathrooms = _selectedProperty.Bathrooms, 
+                Bedrooms = _selectedProperty.Bedrooms, 
+                City = _selectedProperty.City, 
+                Description = _selectedProperty.Description, 
+                Comment = _selectedProperty.Comment,
+                Fireplace = _selectedProperty.Fireplace, 
+                Pool = _selectedProperty.Pool, 
+                Price = _selectedProperty.Price, 
+                State = _selectedProperty.State, 
+                SqrFeet = _selectedProperty.SqrFeet,
+                Zipcode = _selectedProperty.Zipcode });
         }
 
         private void DeleteEstate()
         {
+            db = new MongoCRUD("PropertyDB");
+            db.DeleteEstate("Estates", _selectedProperty.Id, _selectedProperty);
             _estateProperties.Remove(_selectedProperty);
         }
 
@@ -81,7 +109,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         public MainViewModel(MongoCRUD db)
         {            
             db = new MongoCRUD("PropertyDB");
-            _estateProperties = db.LoadEstates<EstateProperties>("Estates");
+            var collection = db.LoadEstates<EstateProperties>("Estates");
+            _estateProperties = new ObservableCollection<EstateProperties>(collection);
+            _selectedProperty = new EstateProperties();
         }
     }
 }
