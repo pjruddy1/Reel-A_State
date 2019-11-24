@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLayer\MongoCRUD.cs" />
+    <Compile Include="BusinessLayer\MongoHelper.cs" />
     <Compile Include="DataAccessLayer\EstatePropertySeedData.cs" />
     <Compile Include="Models\Comments.cs" />
     <Compile Include="Models\DataType.cs" />

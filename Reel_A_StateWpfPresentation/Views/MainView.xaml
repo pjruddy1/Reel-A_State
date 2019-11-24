@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Reel_A_StateWpfPresentation.Views"
         mc:Ignorable="d"
         Title="Reel A State" 
-        Height="650" 
+        Height="575" 
         Width="1200"
         Background="Gray"
         ResizeMode="NoResize"
@@ -102,13 +102,14 @@
             Grid.Column="1"
             Grid.Row="2"
             Orientation="Vertical">
-
-            <Grid>
+            <Border Style="{StaticResource InsideBorderStyle}">
+                <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+               
                 <StackPanel
                         Grid.Column="0"
                         Margin="20,0,0,0"
@@ -119,13 +120,14 @@
                             Content="Price"
                             Style="{StaticResource RadioButtonStyle}"
                             IsChecked="True"
-                            Checked="RadioButton_Sort_Checked"/>
+                            Checked="RadioButton_Sort_Checked"
+                            Command="{Binding Path=SortListByPriceCommand}"/>
                     <RadioButton 
-                            Name="RadioButton_BathroomSort"
-                            Content="Bathrooms"
+                            Name="RadioButton_CitySort"
+                            Content="City"
                             Style="{StaticResource RadioButtonStyle}"
                             Checked="RadioButton_Sort_Checked"
-                            Command="{Binding Path=SortListByAgeCommand}"/>
+                            Command="{Binding Path=SortListByCityCommand}"/>
                 </StackPanel>
                 <StackPanel
                         Grid.Column="1"
@@ -163,10 +165,11 @@
                             Checked="RadioButton_Sort_Checked"
                             Command="{Binding Path=SortListByAcresCommand}"/>
                 </StackPanel>
+               
             </Grid>
-
+            </Border>
             <Grid
-                    Height="475">
+                    Height="410">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5*"/>
                     <ColumnDefinition Width="9*"/>
@@ -184,13 +187,10 @@
                         <DataTemplate>
                             <StackPanel
                                 Orientation="Horizontal">
-                                <Border Margin="5" BorderBrush="Black" BorderThickness="1">
-                                    <Image 
-                                        Source="{Binding ImageFilePath}" 
-                                        Stretch="UniformToFill"  
-                                        Width="40" 
-                                        Height="40" />
-                                </Border>
+                                <Label
+                                    Content="{Binding Price}"
+                                    Padding="0,5"
+                                    Style="{StaticResource LabelStyle}"/>                                
                                 <Label
                                     Content="{Binding Address}"
                                     Width="150"
@@ -216,8 +216,8 @@
             Style="{StaticResource InsideBorderStyle}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height=".6*"/>
-                    <RowDefinition Height=".4*"/>
+                    <RowDefinition Height=".8*"/>
+                    <RowDefinition Height=".2*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width=".3*"/>
@@ -254,6 +254,16 @@
                         Style="{StaticResource MainLabelStyle}"/>
                         <TextBox
                             Text="{Binding SelectedProperty.State}"
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <StackPanel
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <Label
+                        Content="Price:"
+                        Style="{StaticResource MainLabelStyle}"/>
+                        <TextBox
+                            Text="{Binding SelectedProperty.Price}"
                             Style="{StaticResource TextBoxStyle}"/>
                     </StackPanel>
                     <StackPanel
@@ -323,18 +333,10 @@
                     <StackPanel
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
-                        <Image
-                            Margin="7,7,0,0"
-                            Height="200"
-                            Width="200"
-                            Source="{Binding SelectedProperty.ImageFilePath1}"/>
-                        <Image
-                            Margin="7,7,0,0"
-                            Height="200"
-                            Width="200"
-                            Source="{Binding SelectedProperty.ImageFilePath1}"/>
+                        
                     </StackPanel>
                     <StackPanel 
+                        Margin="0,20,0,0"
                         Orientation="Vertical"
                         HorizontalAlignment="Center">
                         <Label 
@@ -351,16 +353,6 @@
                             VerticalScrollBarVisibility="Visible"
                             Text="{Binding SelectedProperty.Description}" 
                             Style="{StaticResource TextBoxStyle}"/>
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2">
-                    <StackPanel 
-                        Orientation="Vertical"
-                        HorizontalAlignment="right"
-                        Margin="0,0,25,0">                        
                         <Label 
                             HorizontalAlignment="Left"
                             Content="Comments: " 
@@ -376,9 +368,25 @@
                             Text="{Binding SelectedProperty.Comment}" 
                             Style="{StaticResource TextBoxStyle}"/>
                     </StackPanel>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2">
+                    <StackPanel 
+                        Orientation="Vertical"
+                        HorizontalAlignment="right"
+                        Margin="0,0,25,0">                        
+                        
+                    </StackPanel>
                     <StackPanel 
                         Orientation="Horizontal"
-                        HorizontalAlignment="Center">                        
+                        HorizontalAlignment="Center">
+                        <Button 
+                            x:Name="Button_Clear"   
+                            Content="Clear"
+                            Style="{StaticResource ButtonStyle}"
+                            Command="{Binding Path=ClearEstateCommand}"/>
                         <Button 
                             x:Name="Button_Add"   
                             Content="Add"
@@ -393,7 +401,7 @@
                             x:Name="Button_Edit"   
                             Content="Edit"
                             Style="{StaticResource ButtonStyle}"
-                            Command="{Binding Path=EditEstateCommand}"/>
+                            Command="{Binding Path=UpdateEstateCommand}"/>
                         <Button 
                             x:Name="Button_Quit"   
                             Content="Quit"
