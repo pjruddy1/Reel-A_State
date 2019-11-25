@@ -20,8 +20,6 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             get { return new DelegateCommand(ClearEstate); }
         }
 
-
-
         public ICommand DeleteEstateCommand
         {
             get { return new DelegateCommand(DeleteEstate); }
@@ -44,16 +42,24 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         {
             get { return new DelegateCommand(SortListByCity); }
         }
-
-        private void SortListByCity()
+        public ICommand SortListByBedroomCommand
         {
-            _estateProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.City));
+            get { return new DelegateCommand(SortListByBedroom); }
+        }
+        public ICommand SortListBySqrFeetCommand
+        {
+            get { return new DelegateCommand(SortListBySqrFeet); }
+        }
+        public ICommand SortListByZipCommand
+        {
+            get { return new DelegateCommand(SortListByZip); }
+        }
+        public ICommand SortListByAcresCommand
+        {
+            get { return new DelegateCommand(SortListByState); }
         }
 
-        private void SortListByPrice()
-        {
-            _estateProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.Price));
-        }
+        
 
         private MongoCRUD db;
         private ObservableCollection<EstateProperties> _estateProperties;
@@ -82,7 +88,6 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             set
             {
                 _estateProperties = value;
-                OnPropertyChanged(nameof(EstateProperties));
             }
         }
 
@@ -148,5 +153,85 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             _selectedProperty = new EstateProperties();
         }
 
+        private static void EstatePropertiesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SortListByState()
+        {
+            ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.State));
+            foreach (EstateProperties estate in newProperties)
+            {
+                _estateProperties.Remove(estate);
+            }
+            foreach (EstateProperties estateProperties in newProperties)
+            {
+                _estateProperties.Add(estateProperties);
+            }
+        }
+        private void SortListByZip()
+        {
+            ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.Zipcode));
+            foreach (EstateProperties estate in newProperties)
+            {
+                _estateProperties.Remove(estate);
+            }
+            foreach (EstateProperties estateProperties in newProperties)
+            {
+                _estateProperties.Add(estateProperties);
+            }
+        }
+        private void SortListBySqrFeet()
+        {
+            ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.SqrFeet));
+            foreach (EstateProperties estate in newProperties)
+            {
+                _estateProperties.Remove(estate);
+            }
+            foreach (EstateProperties estateProperties in newProperties)
+            {
+                _estateProperties.Add(estateProperties);
+            }
+        }
+
+        private void SortListByBedroom()
+        {
+            ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.Bedrooms));
+            foreach (EstateProperties estate in newProperties)
+            {
+                _estateProperties.Remove(estate);
+            }
+            foreach (EstateProperties estateProperties in newProperties)
+            {
+                _estateProperties.Add(estateProperties);
+            }
+        }
+
+        private void SortListByCity()
+        {
+            ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.City));
+            foreach (EstateProperties estate in newProperties)
+            {
+                _estateProperties.Remove(estate);
+            }
+            foreach (EstateProperties estateProperties in newProperties)
+            {
+                _estateProperties.Add(estateProperties);
+            }
+        }
+
+        private void SortListByPrice()
+        {
+            ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.Price));
+            foreach (EstateProperties estate in newProperties)
+            {
+                _estateProperties.Remove(estate);
+            }
+            foreach (EstateProperties estateProperties in newProperties)
+            {
+                _estateProperties.Add(estateProperties);
+            }
+        }
     }
 }

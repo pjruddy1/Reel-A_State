@@ -159,11 +159,11 @@
                             Checked="RadioButton_Sort_Checked"
                             Command="{Binding Path=SortListBySqrFeetCommand}"/>
                     <RadioButton 
-                            Name="RadioButton_AcreSort"
-                            Content="Acres"
+                            Name="RadioButton_StateSort"
+                            Content="State"
                             Style="{StaticResource RadioButtonStyle}"
                             Checked="RadioButton_Sort_Checked"
-                            Command="{Binding Path=SortListByAcresCommand}"/>
+                            Command="{Binding Path=SortListByStateCommand}"/>
                 </StackPanel>
                
             </Grid>
