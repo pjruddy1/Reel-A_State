@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,16 +26,19 @@ namespace Reel_A_StateData.Models
         private string _description;
         private string _comment;
         private int _sqrFeet;
+        public string Dollars { get; set; }
         #endregion
 
 
         #region Properties
+
         [BsonId]
         public Guid Id
         {
             get { return _id; }
             set { _id = value; }
         }
+        
         public string Address
         {
             get { return _address; }
@@ -108,10 +112,24 @@ namespace Reel_A_StateData.Models
         #endregion
 
 
+        private void ValidateStringProperty<T>(T value, string name)
+        {
+            Validator.ValidateProperty(value, new ValidationContext(this, null, null)
+            {
+                MemberName = name
+            }); 
+        }
+
+        public static string GetDollarAmount(decimal price)
+        {
+           
+            return price.ToString("C");
+        }
+
         #region Constructors
         public EstateProperties()
         {
-
+            Dollars = GetDollarAmount(_price);
         }
         #endregion
 

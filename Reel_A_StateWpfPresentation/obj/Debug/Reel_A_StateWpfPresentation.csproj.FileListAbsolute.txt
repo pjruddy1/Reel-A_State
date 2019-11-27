@@ -31,3 +31,6 @@ C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_StateWpfPresentation\bin\Debug\DnsCli
 C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_StateWpfPresentation\bin\Debug\Snappy.NET.xml
 C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_StateWpfPresentation\bin\Debug\System.Buffers.xml
 C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_StateWpfPresentation\bin\Debug\Crc32C.NET.xml
+C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_StateWpfPresentation\bin\Debug\FluentValidation.dll
+C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_StateWpfPresentation\bin\Debug\System.ComponentModel.Annotations.dll
+C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_StateWpfPresentation\bin\Debug\FluentValidation.xml

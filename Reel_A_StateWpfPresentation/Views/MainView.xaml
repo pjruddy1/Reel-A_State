@@ -13,7 +13,22 @@
         WindowStyle="None"
         WindowStartupLocation="CenterScreen">
 
+   
+
     <Window.Resources>
+        <ControlTemplate x:Key="errorTemplate">
+            <Border BorderBrush="Red" BorderThickness="2">
+                <Grid>
+                    <AdornedElementPlaceholder/>
+                    <TextBlock 
+                        Text="{Binding [0].ErrorContent}"
+                        Foreground="Red"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,2,0"/>
+                </Grid>
+            </Border>
+        </ControlTemplate>
         <Style x:Key="InsideBorderStyle" TargetType="Border">
             <Setter Property="BorderBrush" Value="Black"/>
             <Setter Property="BorderThickness" Value="2"/>
@@ -25,14 +40,19 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="10"/>
         </Style>
+        <Style x:Key="ErrorBorderStyle" TargetType="Border">
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            
+        </Style>
         <Style x:Key="HeaderStyle" TargetType="Label">
             <Setter Property="Foreground" Value="DarkBlue"/>
             <Setter Property="FontSize" Value="40"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontFamily" Value="Cursive"/>
         </Style>
-        <Style x:Key="SubHeaderStyle" TargetType="Label">
-            <Setter Property="Foreground" Value="DarkGoldenrod"/>
+        <Style x:Key="ErrorHeaderStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="Red"/>
             <Setter Property="FontSize" Value="16"/>
         </Style>
         <Style x:Key="DetailLabelStyle" TargetType="Label">
@@ -61,6 +81,18 @@
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
+        <Style x:Key="SearchButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="DarkBlue"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="DarkSlateGray"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="DarkBlue"/>
             <Setter Property="Foreground" Value="WhiteSmoke"/>
@@ -70,7 +102,7 @@
             <Setter Property="FontSize" Value="20"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Background" Value="DarkSlateGray"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -90,6 +122,21 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Left"
+            Margin="20,0,0,10"
+            Orientation="Horizontal">
+            <Button
+                Content="Search Address:"
+                Style="{StaticResource SearchButtonStyle}"
+                Command="{Binding Path=SearchAddressCommand}"/>
+            <TextBox
+                Text="{Binding SearchedAddress, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource TextBoxStyle}"/>
+        </StackPanel>
         <Label
             Grid.Row="1"
             Grid.Column="0"
@@ -188,7 +235,7 @@
                             <StackPanel
                                 Orientation="Horizontal">
                                 <Label
-                                    Content="{Binding Price}"
+                                    Content="{Binding Dollars}"
                                     Padding="0,5"
                                     Style="{StaticResource LabelStyle}"/>                                
                                 <Label
@@ -227,13 +274,14 @@
                     Grid.Row="0"
                     Grid.Column="0">
                     <StackPanel
+                        Margin="0,15,0,0"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
                         <Label
                         Content="Address:"
                         Style="{StaticResource MainLabelStyle}"/>
                         <TextBox
-                            Text="{Binding SelectedProperty.Address}"
+                            Text="{Binding WorkingProperty.Address}"
                             Style="{StaticResource TextBoxStyle}"/>
                     </StackPanel>
                     <StackPanel
@@ -243,7 +291,7 @@
                         Content="City:"
                         Style="{StaticResource MainLabelStyle}"/>
                         <TextBox
-                            Text="{Binding SelectedProperty.City}"
+                            Text="{Binding WorkingProperty.City}"
                             Style="{StaticResource TextBoxStyle}"/>
                     </StackPanel>
                     <StackPanel
@@ -253,7 +301,7 @@
                         Content="State:"
                         Style="{StaticResource MainLabelStyle}"/>
                         <TextBox
-                            Text="{Binding SelectedProperty.State}"
+                            Text="{Binding WorkingProperty.State}"
                             Style="{StaticResource TextBoxStyle}"/>
                     </StackPanel>
                     <StackPanel
@@ -263,8 +311,10 @@
                         Content="Price:"
                         Style="{StaticResource MainLabelStyle}"/>
                         <TextBox
-                            Text="{Binding SelectedProperty.Price}"
+                             
+                            Text="{Binding WorkingProperty.Price}"
                             Style="{StaticResource TextBoxStyle}"/>
+                       
                     </StackPanel>
                     <StackPanel
                         HorizontalAlignment="Right"
@@ -273,7 +323,7 @@
                         Content="Zip Code:"
                         Style="{StaticResource MainLabelStyle}"/>
                         <TextBox
-                            Text="{Binding SelectedProperty.Zipcode}"
+                            Text="{Binding WorkingProperty.Zipcode}"
                             Style="{StaticResource TextBoxStyle}"/>
                     </StackPanel>
                     <StackPanel
@@ -283,7 +333,7 @@
                         Content="Bedrooms:"
                         Style="{StaticResource MainLabelStyle}"/>
                         <TextBox
-                            Text="{Binding SelectedProperty.Bedrooms}"
+                            Text="{Binding WorkingProperty.Bedrooms}"
                             Style="{StaticResource TextBoxStyle}"/>
                     </StackPanel>
                     <StackPanel
@@ -293,7 +343,7 @@
                         Content="Bathrooms:"
                         Style="{StaticResource MainLabelStyle}"/>
                         <TextBox
-                            Text="{Binding SelectedProperty.Bathrooms}"
+                            Text="{Binding WorkingProperty.Bathrooms}"
                             Style="{StaticResource TextBoxStyle}"/>
                     </StackPanel>
                     <StackPanel
@@ -303,7 +353,7 @@
                         Content="Sqr Feet:"
                         Style="{StaticResource MainLabelStyle}"/>
                         <TextBox
-                            Text="{Binding SelectedProperty.SqrFeet}"
+                            Text="{Binding WorkingProperty.SqrFeet}"
                             Style="{StaticResource TextBoxStyle}"/>
                     </StackPanel>
                     <StackPanel
@@ -313,7 +363,7 @@
                         Content="Fireplace:"
                         Style="{StaticResource MainLabelStyle}"/>
                         <TextBox
-                            Text="{Binding SelectedProperty.Fireplace}"
+                            Text="{Binding WorkingProperty.Fireplace}"
                             Style="{StaticResource TextBoxStyle}"/>
                     </StackPanel>
                     <StackPanel
@@ -323,7 +373,7 @@
                         Content="Pool:"
                         Style="{StaticResource MainLabelStyle}"/>
                         <TextBox
-                            Text="{Binding SelectedProperty.Pool}"
+                            Text="{Binding WorkingProperty.Pool}"
                             Style="{StaticResource TextBoxStyle}"/>
                     </StackPanel>
                 </StackPanel>
@@ -336,7 +386,7 @@
                         
                     </StackPanel>
                     <StackPanel 
-                        Margin="0,20,0,0"
+                        Margin="0,10,0,0"
                         Orientation="Vertical"
                         HorizontalAlignment="Center">
                         <Label 
@@ -351,7 +401,7 @@
                             AcceptsReturn="True"
                             VerticalContentAlignment="Top"
                             VerticalScrollBarVisibility="Visible"
-                            Text="{Binding SelectedProperty.Description}" 
+                            Text="{Binding WorkingProperty.Description}" 
                             Style="{StaticResource TextBoxStyle}"/>
                         <Label 
                             HorizontalAlignment="Left"
@@ -365,8 +415,24 @@
                             AcceptsReturn="True"
                             VerticalContentAlignment="Top"
                             VerticalScrollBarVisibility="Visible"
-                            Text="{Binding SelectedProperty.Comment}" 
+                            Text="{Binding WorkingProperty.Comment}" 
                             Style="{StaticResource TextBoxStyle}"/>
+                        <Label 
+                            HorizontalAlignment="Left"
+                            Content="Errors: " 
+                            Style="{StaticResource ErrorHeaderStyle}"/>
+                        <Border
+                            Style="{StaticResource ErrorBorderStyle}">
+                            <ListBox 
+                                x:Name="Errors"
+                                Background="WhiteSmoke"
+                                ItemsSource="{Binding Errors}"
+                                IsSynchronizedWithCurrentItem="true"
+                                ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                Height="60">
+                            </ListBox>
+                        </Border>
+                       
                     </StackPanel>
                 </StackPanel>
                 <StackPanel
@@ -387,6 +453,11 @@
                             Content="Clear"
                             Style="{StaticResource ButtonStyle}"
                             Command="{Binding Path=ClearEstateCommand}"/>
+                        <Button 
+                            x:Name="Button_View"   
+                            Content="View"
+                            Style="{StaticResource ButtonStyle}"
+                            Command="{Binding Path=ViewEstateCommand}"/>
                         <Button 
                             x:Name="Button_Add"   
                             Content="Add"

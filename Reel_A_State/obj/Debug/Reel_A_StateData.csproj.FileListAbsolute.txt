@@ -22,3 +22,6 @@ C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_State\bin\Debug\MongoDB.Driver.xml
 C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_State\bin\Debug\MongoDB.Driver.Core.xml
 C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_State\bin\Debug\Snappy.NET.xml
 C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_State\bin\Debug\System.Buffers.xml
+C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_State\bin\Debug\FluentValidation.dll
+C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_State\bin\Debug\System.ComponentModel.Annotations.dll
+C:\Users\ruddy\Desktop\Reel_A_State\Reel_A_State\bin\Debug\FluentValidation.xml
