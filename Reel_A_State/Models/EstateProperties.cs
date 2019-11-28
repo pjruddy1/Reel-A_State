@@ -110,19 +110,13 @@ namespace Reel_A_StateData.Models
             set { _sqrFeet = value; }
         }
         #endregion
-
-
-        private void ValidateStringProperty<T>(T value, string name)
-        {
-            Validator.ValidateProperty(value, new ValidationContext(this, null, null)
-            {
-                MemberName = name
-            }); 
-        }
-
+        /// <summary>
+        /// Method that converts Price to dollar amount string
+        /// </summary>
+        /// <param name="price"></param>
+        /// <returns></returns>
         public static string GetDollarAmount(decimal price)
         {
-           
             return price.ToString("C");
         }
 

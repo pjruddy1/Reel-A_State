@@ -15,34 +15,37 @@ namespace Reel_A_State.BusinessLayer
     {
         private IMongoDatabase db;
 
-        public MongoCRUD(string database)
-        {
-            var client = new MongoClient("mongodb://PJ123:Longshot1984@propertydb-shard-00-00-tmilp.mongodb.net:27017,propertydb-shard-00-01-tmilp.mongodb.net:27017,propertydb-shard-00-02-tmilp.mongodb.net:27017/test?ssl=true&replicaSet=PropertyDB-shard-0&authSource=admin&retryWrites=true&w=majority");
-            db = client.GetDatabase(database);
-        }
-
+        #region Methods
+        /// <summary>
+        /// Insert Property into Database
+        /// </summary>
+        /// <typeparam name="EstateProperties"></typeparam>
+        /// <param name="table"></param>
+        /// <param name="estate"></param>
         public void InsertEstate<EstateProperties>(string table, EstateProperties estate)
         {
             var collection = db.GetCollection<EstateProperties>(table);
             collection.InsertOne(estate);
         }
-
+        /// <summary>
+        /// Reach Database to get list of properties
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="table"></param>
+        /// <returns></returns>
         public List<T> LoadEstates<T>(string table)
         {
             var collection = db.GetCollection<T>(table);
             return collection.Find(new BsonDocument()).ToList();
         }
-
-        public void UpsertEstate<T>(string table, Guid id, T record)
-        {
-            var collection = db.GetCollection<T>(table);
-
-            var result = collection.ReplaceOne(
-                new BsonDocument("_id", id),
-                record,
-                new UpdateOptions { IsUpsert = true });
-        }
-
+        /// <summary>
+        /// Update Entry to Database
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="table"></param>
+        /// <param name="id"></param>
+        /// <param name="Record"></param>
+        /// <param name="estate"></param>
         public void UpdateEstate<T>(string table, Guid id, T Record, EstateProperties estate)
         {
             var collection = db.GetCollection<T>(table);
@@ -53,7 +56,13 @@ namespace Reel_A_State.BusinessLayer
                                                             .Set("Comment", estate.Comment).Set("Description", estate.Description).Set("Fireplace", estate.Fireplace);
             collection.UpdateOne(filter, update);
         }
-
+        /// <summary>
+        /// Delete Entry from database
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="table"></param>
+        /// <param name="id"></param>
+        /// <param name="Record"></param>
         public void DeleteEstate<T>(string table, Guid id, T Record)
         {
             var collection = db.GetCollection<T>(table);
@@ -62,5 +71,14 @@ namespace Reel_A_State.BusinessLayer
 
             collection.DeleteOne(filter);
         }
+        #endregion
+        #region Constructor
+        public MongoCRUD(string database)
+        {
+            var client = new MongoClient("mongodb://PJ123:Longshot1984@propertydb-shard-00-00-tmilp.mongodb.net:27017,propertydb-shard-00-01-tmilp.mongodb.net:27017,propertydb-shard-00-02-tmilp.mongodb.net:27017/test?ssl=true&replicaSet=PropertyDB-shard-0&authSource=admin&retryWrites=true&w=majority");
+            db = client.GetDatabase(database);
+        }
+        #endregion
+        
     }
 }

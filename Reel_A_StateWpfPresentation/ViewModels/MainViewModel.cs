@@ -24,17 +24,14 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         {
             get { return new DelegateCommand(ClearEstate); }
         }
-
         public ICommand DeleteEstateCommand
         {
             get { return new DelegateCommand(DeleteEstate); }
         }
-
         public ICommand AddEstateCommand
         {
             get { return new DelegateCommand(AddEstate); }
         }
-
         public ICommand UpdateEstateCommand
         {
             get { return new DelegateCommand(UpdateEstate); }
@@ -71,8 +68,6 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         {
             get { return new DelegateCommand(SearchAddress); }
         }
-
-
         #endregion
 
         #region Fields
@@ -138,7 +133,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         #endregion
 
         #region Methods
-
+        /// <summary>
+        /// View the properties of the selected Estate
+        /// </summary>
         private void ViewEstate()
         {
             //_workingProperty = _selectedProperty;
@@ -158,6 +155,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             _workingProperty.Zipcode = _selectedProperty.Zipcode;
             OnPropertyChanged("WorkingProperty");
         }
+        /// <summary>
+        /// Cleater out all properties and also reset the list
+        /// </summary>
         private void ClearEstate()
         {
             db = new MongoCRUD("PropertyDB");
@@ -182,12 +182,16 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             OnPropertyChanged("WorkingProperty");
 
         }
+        /// <summary>
+        /// Validates the working property and then calls the update crud operation
+        /// </summary>
         private void UpdateEstate()
         {
+            // Instantiate the validator and save the result
             EstateValidator validator = new EstateValidator();
-
             ValidationResult results = validator.Validate(_workingProperty);
 
+            // if the result is false spit out errors
             if (results.IsValid == false)
             {
                 foreach (ValidationFailure failure in results.Errors)
@@ -197,6 +201,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                     OnPropertyChanged("Errors");
                 }
             }
+            // if no errors call the CRUD operations update method
             else
             {
                 _workingProperty = new EstateProperties();
@@ -209,7 +214,10 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             }
                 
         }
-
+        /// <summary>
+        /// Calls the method to insert entry into the database 
+        /// and adds the entry to the end of the list
+        /// </summary>
         private void AddEstate()
         {
             EstateValidator validator = new EstateValidator();
@@ -250,7 +258,10 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             }
             
         }
-
+        /// <summary>
+        /// Calls the method to delete entry from the database
+        /// and deletes entry from the list
+        /// </summary>
         private void DeleteEstate()
         {
             if (_selectedProperty != null)
@@ -266,7 +277,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             }
            
         }
-
+        /// <summary>
+        /// Sorts the list by state
+        /// </summary>
         private void SortListByState()
         {
             ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.State));
@@ -279,6 +292,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 _estateProperties.Add(estateProperties);
             }
         }
+        /// <summary>
+        /// sorts list by zip
+        /// </summary>
         private void SortListByZip()
         {
             ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.Zipcode));
@@ -291,6 +307,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 _estateProperties.Add(estateProperties);
             }
         }
+        /// <summary>
+        /// Sorts list by SqrFeet
+        /// </summary>
         private void SortListBySqrFeet()
         {
             ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.SqrFeet));
@@ -303,7 +322,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 _estateProperties.Add(estateProperties);
             }
         }
-
+        /// <summary>
+        /// Sorts list by bedroom
+        /// </summary>
         private void SortListByBedroom()
         {
             ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.Bedrooms));
@@ -316,7 +337,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 _estateProperties.Add(estateProperties);
             }
         }
-
+        /// <summary>
+        /// Sort list by city
+        /// </summary>
         private void SortListByCity()
         {
             ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.City));
@@ -329,7 +352,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 _estateProperties.Add(estateProperties);
             }
         }
-
+        /// <summary>
+        /// Sort list by price
+        /// </summary>
         private void SortListByPrice()
         {
             ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.Price));
@@ -342,7 +367,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 _estateProperties.Add(estateProperties);
             }
         }
-
+        /// <summary>
+        /// called when user is searching for address value
+        /// </summary>
         private void SearchAddress()
         {
             db = new MongoCRUD("PropertyDB");

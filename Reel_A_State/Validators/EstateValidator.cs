@@ -11,7 +11,7 @@ namespace Reel_A_State.Validators
     public class EstateValidator : AbstractValidator<EstateProperties>
     {
 
-
+        #region CONSTRUCTOR
         public EstateValidator()
         {
             RuleFor(p => p.Address).Cascade(CascadeMode.StopOnFirstFailure)
@@ -43,5 +43,7 @@ namespace Reel_A_State.Validators
             RuleFor(p => p.Pool).Cascade(CascadeMode.StopOnFirstFailure)
                 .NotNull().WithMessage("{PropertyName} Can't be Empty");
         }
+
+        #endregion
     }
 }
