@@ -103,6 +103,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             set
             {
                 _estateProperties = value;
+                OnPropertyChanged("EstateProperties");
             }
         }
 
@@ -163,6 +164,11 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             db = new MongoCRUD("PropertyDB");
             var collection = db.LoadEstates<EstateProperties>("Estates");
             _estateProperties = new ObservableCollection<EstateProperties>(collection);
+            OnPropertyChanged("EstateProperties");
+            foreach (EstateProperties estate in _estateProperties)
+            {
+                estate.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(estate.Price);
+            }
 
             _workingProperty = new EstateProperties()
             {
@@ -379,7 +385,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
 
             foreach (EstateProperties estate in _estateProperties)
             {
-                if (estate.Address.Contains(SearchedAddress))
+                if (estate.Address.ToUpper().Contains(SearchedAddress.ToUpper()))
                 {
                     newProperties.Add(estate);
                 }
@@ -387,11 +393,15 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             
             foreach (EstateProperties estate in deleteProperties)
             {
-                _estateProperties.Remove(estate);
+                _estateProperties.Clear();
             }
             foreach (EstateProperties estateProperties in newProperties)
             {
                 _estateProperties.Add(estateProperties);
+            }
+            foreach (EstateProperties estate in _estateProperties)
+            {
+                estate.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(estate.Price);
             }
 
         }
