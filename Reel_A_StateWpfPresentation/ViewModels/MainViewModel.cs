@@ -162,9 +162,15 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         /// </summary>
         private void ClearEstate()
         {
-            db = new MongoCRUD("PropertyDB");
-            var collection = db.LoadEstates<EstateProperties>("Estates");
-            _estateProperties = new ObservableCollection<EstateProperties>(collection);
+            //db = new MongoCRUD("PropertyDB");
+            //var collection = db.LoadEstates<EstateProperties>("Estates");
+            //_estateProperties = new ObservableCollection<EstateProperties>(collection);
+
+            EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
+            _epBusiness = epBusiness;
+            _estateProperties = new ObservableCollection<EstateProperties>(epBusiness.AllEstateProperties());
+
+            
             OnPropertyChanged("EstateProperties");
             foreach (EstateProperties estate in _estateProperties)
             {
@@ -194,6 +200,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         /// </summary>
         private void UpdateEstate()
         {
+            OnPropertyChanged("WorkingProperty");
             // Instantiate the validator and save the result
             EstateValidator validator = new EstateValidator();
             ValidationResult results = validator.Validate(_workingProperty);
@@ -211,10 +218,15 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             // if no errors call the CRUD operations update method
             else
             {
-                _workingProperty = new EstateProperties();
-                _workingProperty = _selectedProperty;
-                db = new MongoCRUD("PropertyDB");
-                db.UpdateEstate("Estates", _workingProperty.Id, _workingProperty, _workingProperty);
+                _selectedProperty = _workingProperty;
+                EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
+                _epBusiness = epBusiness;
+                _epBusiness.UpdateEstateProperty(_workingProperty);
+                _estateProperties.Remove(_selectedProperty);
+                _estateProperties.Add(_workingProperty);
+
+                //db = new MongoCRUD("PropertyDB");
+                //db.UpdateEstate("Estates", _workingProperty.Id, _workingProperty, _workingProperty);
 
                 _errors = new ObservableCollection<string>();
                 OnPropertyChanged("Errors");
@@ -242,22 +254,26 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             }
             else
             {
-                db = new MongoCRUD("PropertyDB");
-                db.InsertEstate("Estates", new EstateProperties
-                {
-                    Address = _workingProperty.Address,
-                    Bathrooms = _workingProperty.Bathrooms,
-                    Bedrooms = _workingProperty.Bedrooms,
-                    City = _selectedProperty.City,
-                    Description = _workingProperty.Description,
-                    Comment = _workingProperty.Comment,
-                    Fireplace = _workingProperty.Fireplace,
-                    Pool = _workingProperty.Pool,
-                    Price = _workingProperty.Price,
-                    State = _workingProperty.State,
-                    SqrFeet = _workingProperty.SqrFeet,
-                    Zipcode = _workingProperty.Zipcode
-                });
+                EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
+                _epBusiness = epBusiness;
+                _epBusiness.AddEstateProperty(_workingProperty);
+                //db = new MongoCRUD("PropertyDB");
+                //db.InsertEstate("Estates", new EstateProperties
+                //{
+                //    Address = _workingProperty.Address,
+                //    Bathrooms = _workingProperty.Bathrooms,
+                //    Bedrooms = _workingProperty.Bedrooms,
+                //    City = _selectedProperty.City,
+                //    Description = _workingProperty.Description,
+                //    Comment = _workingProperty.Comment,
+                //    Fireplace = _workingProperty.Fireplace,
+                //    Pool = _workingProperty.Pool,
+                //    Price = _workingProperty.Price,
+                //    State = _workingProperty.State,
+                //    SqrFeet = _workingProperty.SqrFeet,
+                //    Zipcode = _workingProperty.Zipcode
+                //});
+                _workingProperty.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(_workingProperty.Price);
                 _estateProperties.Add(_workingProperty);
 
                 _errors = new ObservableCollection<string>();
@@ -277,8 +293,12 @@ namespace Reel_A_StateWpfPresentation.ViewModels
 
                 if (messageBoxResult == MessageBoxResult.OK)
                 {
-                    db = new MongoCRUD("PropertyDB");
-                    db.DeleteEstate("Estates", _selectedProperty.Id, _selectedProperty);
+                    EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
+                    _epBusiness = epBusiness;
+                    _epBusiness.DeleteEstateProperty(_selectedProperty);
+
+                    //db = new MongoCRUD("PropertyDB");
+                    //db.DeleteEstate("Estates", _selectedProperty.Id, _selectedProperty);
                     _estateProperties.Remove(_selectedProperty);
                 }
             }
@@ -411,6 +431,8 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         #region CONSTRUCTOR
         public MainViewModel(EstatePropertiesBusiness epBusiness)
         {
+            //db = new MongoCRUD("PropertyDB");
+            
             _epBusiness = epBusiness;
             _estateProperties = new ObservableCollection<EstateProperties>(epBusiness.AllEstateProperties());
             foreach (EstateProperties estate in _estateProperties)

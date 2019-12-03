@@ -12,6 +12,7 @@ namespace Reel_A_State.BusinessLayer
     public class EstatePropertiesRepository : IEstatePropertiesRepository, IDisposable
     {
         public string Table = "Estates";
+        public string database = "PropertyDB";
         private IDataService _dataService;
         List<EstateProperties> _estatProperties;
 
@@ -35,7 +36,7 @@ namespace Reel_A_State.BusinessLayer
             switch (DataConfig.dataType)
             {
                 case DataType.BSON:
-                    return new DataServiceMongo(Table);
+                    return new DataServiceMongo(database);
 
                 default:
                     throw new Exception();
