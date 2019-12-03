@@ -19,9 +19,9 @@ namespace Reel_A_StateWpfPresentation
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            MongoCRUD db = new MongoCRUD("PropertyDB");
+            EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
 
-            MainViewModel mainViewModel = new MainViewModel(db);
+            MainViewModel mainViewModel = new MainViewModel(epBusiness);
 
             MainView mainView = new MainView();
             mainView.DataContext = mainViewModel;

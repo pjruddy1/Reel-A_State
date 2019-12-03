@@ -77,6 +77,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         private EstateProperties _selectedProperty;
         private EstateProperties _workingProperty;
         private ObservableCollection<string> _errors;
+        private EstatePropertiesBusiness _epBusiness;
         private string _searchedAddress;
 
         #endregion
@@ -408,11 +409,10 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         #endregion
 
         #region CONSTRUCTOR
-        public MainViewModel(MongoCRUD db)
+        public MainViewModel(EstatePropertiesBusiness epBusiness)
         {
-            db = new MongoCRUD("PropertyDB");
-            var collection = db.LoadEstates<EstateProperties>("Estates");
-            _estateProperties = new ObservableCollection<EstateProperties>(collection);
+            _epBusiness = epBusiness;
+            _estateProperties = new ObservableCollection<EstateProperties>(epBusiness.AllEstateProperties());
             foreach (EstateProperties estate in _estateProperties)
             {
                 estate.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(estate.Price);

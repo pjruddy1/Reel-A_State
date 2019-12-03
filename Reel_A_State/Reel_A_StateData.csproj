@@ -84,8 +84,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLayer\EstatePropertiesBusiness.cs" />
+    <Compile Include="BusinessLayer\EstatePropertiesRepository.cs" />
+    <Compile Include="BusinessLayer\IEstatePropertiesRepository.cs" />
     <Compile Include="BusinessLayer\MongoCRUD.cs" />
+    <Compile Include="DataAccessLayer\DataConfig.cs" />
+    <Compile Include="DataAccessLayer\DataServiceMongo.cs" />
     <Compile Include="DataAccessLayer\EstatePropertySeedData.cs" />
+    <Compile Include="DataAccessLayer\IDataService.cs" />
     <Compile Include="Models\DataType.cs" />
     <Compile Include="Models\EstateProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
