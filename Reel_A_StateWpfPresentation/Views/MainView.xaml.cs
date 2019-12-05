@@ -24,14 +24,5 @@ namespace Reel_A_StateWpfPresentation.Views
             InitializeComponent();
         }
 
-        private void Quit_Click(object sender, RoutedEventArgs e)
-        {
-            Environment.Exit(0);
-        }
-
-        private void RadioButton_Sort_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

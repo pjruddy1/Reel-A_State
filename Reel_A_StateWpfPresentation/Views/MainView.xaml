@@ -166,14 +166,11 @@
                             Name="RadioButton_PriceSort"
                             Content="Price"
                             Style="{StaticResource RadioButtonStyle}"
-                            IsChecked="True"
-                            Checked="RadioButton_Sort_Checked"
                             Command="{Binding Path=SortListByPriceCommand}"/>
                     <RadioButton 
                             Name="RadioButton_CitySort"
                             Content="City"
                             Style="{StaticResource RadioButtonStyle}"
-                            Checked="RadioButton_Sort_Checked"
                             Command="{Binding Path=SortListByCityCommand}"/>
                 </StackPanel>
                 <StackPanel
@@ -185,13 +182,11 @@
                             Name="RadioButton_BedroomSort"
                             Content="Bedrooom"
                             Style="{StaticResource RadioButtonStyle}"
-                            Checked="RadioButton_Sort_Checked"
                             Command="{Binding Path=SortListByBedroomCommand}"/>
                     <RadioButton 
                             Name="RadioButton_ZipSort"
                             Content="Zip Code"
                             Style="{StaticResource RadioButtonStyle}"
-                            Checked="RadioButton_Sort_Checked"
                             Command="{Binding Path=SortListByZipCommand}"/>
                 </StackPanel>
                 <StackPanel
@@ -203,13 +198,11 @@
                             Name="RadioButton_SqrFootSort"
                             Content="Sqr Feet"
                             Style="{StaticResource RadioButtonStyle}"
-                            Checked="RadioButton_Sort_Checked"
                             Command="{Binding Path=SortListBySqrFeetCommand}"/>
                     <RadioButton 
                             Name="RadioButton_StateSort"
                             Content="State"
                             Style="{StaticResource RadioButtonStyle}"
-                            Checked="RadioButton_Sort_Checked"
                             Command="{Binding Path=SortListByStateCommand}"/>
                 </StackPanel>
                
@@ -462,22 +455,25 @@
                             x:Name="Button_Add"   
                             Content="Add"
                             Style="{StaticResource ButtonStyle}"
-                            Command="{Binding Path=AddEstateCommand}"/>
+                            Command="{Binding Path=AddEstateCommand}"
+                            Visibility="{Binding AddVisible, Converter={StaticResource BooleanToVisibility}}"/>
                         <Button 
                             x:Name="Button_Delete"   
                             Content="Delete"
                             Style="{StaticResource ButtonStyle}"
-                            Command="{Binding Path=DeleteEstateCommand}"/>
+                            Command="{Binding Path=DeleteEstateCommand}"
+                            Visibility="{Binding DeleteVisible, Converter={StaticResource BooleanToVisibility}}"/>
                         <Button 
                             x:Name="Button_Edit"   
-                            Content="Edit"
+                            Content="Update"
                             Style="{StaticResource ButtonStyle}"
-                            Command="{Binding Path=UpdateEstateCommand}"/>
+                            Command="{Binding Path=UpdateEstateCommand}"
+                            Visibility="{Binding UpdateVisible, Converter={StaticResource BooleanToVisibility}}"/>
                         <Button 
                             x:Name="Button_Quit"   
                             Content="Quit"
                             Style="{StaticResource ButtonStyle}"
-                            Click="Quit_Click"/>
+                            Command="{Binding Path=ExitApplication}"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>

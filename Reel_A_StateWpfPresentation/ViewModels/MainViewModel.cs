@@ -68,6 +68,10 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         {
             get { return new DelegateCommand(SearchAddress); }
         }
+        public ICommand ExitApplication 
+        {
+            get { return new DelegateCommand(QuitApplication); }
+        }
         #endregion
 
         #region Fields
@@ -79,7 +83,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         private ObservableCollection<string> _errors;
         private EstatePropertiesBusiness _epBusiness;
         private string _searchedAddress;
-
+        private bool _deleteVisible;
+        private bool _updateVisible;
+        private bool _addVisible;
         #endregion
 
         #region Properties
@@ -132,50 +138,92 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             get { return _searchedAddress; }
             set { _searchedAddress = value; }
         }
+        public bool DeleteVisible
+        {
+            get { return _deleteVisible; }
+            set
+            {
+                _deleteVisible = value;
+                OnPropertyChanged("DeleteVisible");
+            }
+        }
+        public bool UpdateVisible
+        {
+            get { return _updateVisible; }
+            set
+            {
+                _updateVisible = value;
+                OnPropertyChanged("UpdateVisible");
+            }
+        }
+        public bool AddVisible
+        {
+            get { return _addVisible; }
+            set
+            {
+                _addVisible = value;
+                OnPropertyChanged("AddVisible");
+            }
+        }
         #endregion
 
         #region Methods
+       /// <summary>
+       /// Leaves application
+       /// </summary>
+        private void QuitApplication()
+        {
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show($"Are you sure you want to Exit?", "Exit", System.Windows.MessageBoxButton.OKCancel);
+
+            if (messageBoxResult == MessageBoxResult.OK)
+            {
+                Environment.Exit(0);
+            }
+        }
+
         /// <summary>
         /// View the properties of the selected Estate
         /// </summary>
+        /// 
         private void ViewEstate()
         {
-            //_workingProperty = _selectedProperty;
-            _workingProperty = new EstateProperties();
-            _workingProperty.Address = _selectedProperty.Address;
-            _workingProperty.Bathrooms = _selectedProperty.Bathrooms;
-            _workingProperty.Bedrooms = _selectedProperty.Bedrooms;
-            _workingProperty.City = _selectedProperty.City;
-            _workingProperty.Comment = _selectedProperty.Comment;
-            _workingProperty.Description = _selectedProperty.Description;
-            _workingProperty.Fireplace = _selectedProperty.Fireplace;
-            _workingProperty.Id = _selectedProperty.Id;
-            _workingProperty.Pool = _selectedProperty.Pool;
-            _workingProperty.Price = _selectedProperty.Price;
-            _workingProperty.SqrFeet = _selectedProperty.SqrFeet;
-            _workingProperty.State = _selectedProperty.State;
-            _workingProperty.Zipcode = _selectedProperty.Zipcode;
-            OnPropertyChanged("WorkingProperty");
+            if (_selectedProperty != null)
+            {
+                _workingProperty = new EstateProperties();
+                _workingProperty.Address = _selectedProperty.Address;
+                _workingProperty.Bathrooms = _selectedProperty.Bathrooms;
+                _workingProperty.Bedrooms = _selectedProperty.Bedrooms;
+                _workingProperty.City = _selectedProperty.City;
+                _workingProperty.Comment = _selectedProperty.Comment;
+                _workingProperty.Description = _selectedProperty.Description;
+                _workingProperty.Fireplace = _selectedProperty.Fireplace;
+                _workingProperty.Id = _selectedProperty.Id;
+                _workingProperty.Pool = _selectedProperty.Pool;
+                _workingProperty.Price = _selectedProperty.Price;
+                _workingProperty.SqrFeet = _selectedProperty.SqrFeet;
+                _workingProperty.State = _selectedProperty.State;
+                _workingProperty.Zipcode = _selectedProperty.Zipcode;
+                OnPropertyChanged("WorkingProperty");
+                DeleteVisible = true;
+                UpdateVisible = true;
+                AddVisible = false;
+            }
+            
         }
+
+
         /// <summary>
         /// Cleater out all properties and also reset the list
         /// </summary>
         private void ClearEstate()
         {
-            //db = new MongoCRUD("PropertyDB");
-            //var collection = db.LoadEstates<EstateProperties>("Estates");
-            //_estateProperties = new ObservableCollection<EstateProperties>(collection);
-
             EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
             _epBusiness = epBusiness;
             _estateProperties = new ObservableCollection<EstateProperties>(epBusiness.AllEstateProperties());
 
             
             OnPropertyChanged("EstateProperties");
-            foreach (EstateProperties estate in _estateProperties)
-            {
-                estate.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(estate.Price);
-            }
+            GetDollarAmount();
 
             _workingProperty = new EstateProperties()
             {
@@ -193,8 +241,24 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 State = ""
             };
             OnPropertyChanged("WorkingProperty");
-
+            DeleteVisible = false;
+            UpdateVisible = false;
+            AddVisible = true;
         }
+
+
+        /// <summary>
+        /// Returns Dollar Amount for Estates
+        /// </summary>
+        private void GetDollarAmount()
+        {
+            foreach (EstateProperties estate in _estateProperties)
+            {
+               estate.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(estate.Price);
+            }
+        }
+
+
         /// <summary>
         /// Validates the working property and then calls the update crud operation
         /// </summary>
@@ -216,23 +280,34 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 }
             }
             // if no errors call the CRUD operations update method
-            else
-            {
-                _selectedProperty = _workingProperty;
-                EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
-                _epBusiness = epBusiness;
-                _epBusiness.UpdateEstateProperty(_workingProperty);
-                _estateProperties.Remove(_selectedProperty);
-                _estateProperties.Add(_workingProperty);
+            if (_selectedProperty.Id == _workingProperty.Id && _selectedProperty != null && _workingProperty != null)            
+            {               
 
-                //db = new MongoCRUD("PropertyDB");
-                //db.UpdateEstate("Estates", _workingProperty.Id, _workingProperty, _workingProperty);
+                if (_workingProperty != null)
+                {
+                    MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show($"Are you sure you want to Update this entry?", "Update Entry", System.Windows.MessageBoxButton.OKCancel);
 
-                _errors = new ObservableCollection<string>();
-                OnPropertyChanged("Errors");
+                    if (messageBoxResult == MessageBoxResult.OK)
+                    {
+                        //_selectedProperty = _workingProperty;
+                        EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
+                        _epBusiness = epBusiness;
+                        _epBusiness.UpdateEstateProperty(_workingProperty);
+                        _estateProperties.Remove(_selectedProperty);
+                        _workingProperty.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(_workingProperty.Price);
+                        _estateProperties.Add(_workingProperty);
+
+
+                        _errors = new ObservableCollection<string>();
+                        OnPropertyChanged("Errors");
+                    }
+                }
+                
             }
                 
         }
+
+
         /// <summary>
         /// Calls the method to insert entry into the database 
         /// and adds the entry to the end of the list
@@ -254,33 +329,30 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             }
             else
             {
-                EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
-                _epBusiness = epBusiness;
-                _epBusiness.AddEstateProperty(_workingProperty);
-                //db = new MongoCRUD("PropertyDB");
-                //db.InsertEstate("Estates", new EstateProperties
-                //{
-                //    Address = _workingProperty.Address,
-                //    Bathrooms = _workingProperty.Bathrooms,
-                //    Bedrooms = _workingProperty.Bedrooms,
-                //    City = _selectedProperty.City,
-                //    Description = _workingProperty.Description,
-                //    Comment = _workingProperty.Comment,
-                //    Fireplace = _workingProperty.Fireplace,
-                //    Pool = _workingProperty.Pool,
-                //    Price = _workingProperty.Price,
-                //    State = _workingProperty.State,
-                //    SqrFeet = _workingProperty.SqrFeet,
-                //    Zipcode = _workingProperty.Zipcode
-                //});
-                _workingProperty.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(_workingProperty.Price);
-                _estateProperties.Add(_workingProperty);
+               
+                if (_workingProperty != null)
+                {
+                    MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show($"Are you sure you want to add this entry?", "Add Entry", System.Windows.MessageBoxButton.OKCancel);
 
-                _errors = new ObservableCollection<string>();
-                OnPropertyChanged("Errors");
+                    if (messageBoxResult == MessageBoxResult.OK)
+                    {
+                        EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
+                        _epBusiness = epBusiness;
+                        _epBusiness.AddEstateProperty(_workingProperty);
+
+                        _workingProperty.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(_workingProperty.Price);
+                        _estateProperties.Add(_workingProperty);
+
+                        _errors = new ObservableCollection<string>();
+                        OnPropertyChanged("Errors");
+                    }
+                }               
+               
             }
             
         }
+
+
         /// <summary>
         /// Calls the method to delete entry from the database
         /// and deletes entry from the list
@@ -304,6 +376,8 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             }
            
         }
+
+
         /// <summary>
         /// Sorts the list by state
         /// </summary>
@@ -319,6 +393,8 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 _estateProperties.Add(estateProperties);
             }
         }
+
+
         /// <summary>
         /// sorts list by zip
         /// </summary>
@@ -334,6 +410,8 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 _estateProperties.Add(estateProperties);
             }
         }
+
+
         /// <summary>
         /// Sorts list by SqrFeet
         /// </summary>
@@ -349,6 +427,8 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 _estateProperties.Add(estateProperties);
             }
         }
+
+
         /// <summary>
         /// Sorts list by bedroom
         /// </summary>
@@ -364,6 +444,8 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 _estateProperties.Add(estateProperties);
             }
         }
+
+
         /// <summary>
         /// Sort list by city
         /// </summary>
@@ -379,6 +461,8 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 _estateProperties.Add(estateProperties);
             }
         }
+
+
         /// <summary>
         /// Sort list by price
         /// </summary>
@@ -394,36 +478,40 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 _estateProperties.Add(estateProperties);
             }
         }
+
+
         /// <summary>
         /// called when user is searching for address value
         /// </summary>
         private void SearchAddress()
         {
-            db = new MongoCRUD("PropertyDB");
-            var collection = db.LoadEstates<EstateProperties>("Estates");
-            ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>();
-            ObservableCollection<EstateProperties> deleteProperties = new ObservableCollection<EstateProperties>(collection);
+            if (SearchedAddress != null)
+            {
+                ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>();
+                ObservableCollection<EstateProperties> deleteProperties = new ObservableCollection<EstateProperties>();
+                EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
 
-            foreach (EstateProperties estate in _estateProperties)
-            {
-                if (estate.Address.ToUpper().Contains(SearchedAddress.ToUpper()))
+                _epBusiness = epBusiness;
+                deleteProperties = new ObservableCollection<EstateProperties>(epBusiness.AllEstateProperties());
+
+                foreach (EstateProperties estate in _estateProperties)
                 {
-                    newProperties.Add(estate);
+                    if (estate.Address.ToUpper().Contains(SearchedAddress.ToUpper()))
+                    {
+                        newProperties.Add(estate);
+                    }
                 }
-            }
-            
-            foreach (EstateProperties estate in deleteProperties)
-            {
-                _estateProperties.Clear();
-            }
-            foreach (EstateProperties estateProperties in newProperties)
-            {
-                _estateProperties.Add(estateProperties);
-            }
-            foreach (EstateProperties estate in _estateProperties)
-            {
-                estate.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(estate.Price);
-            }
+
+                foreach (EstateProperties estate in deleteProperties)
+                {
+                    _estateProperties.Clear();
+                }
+                foreach (EstateProperties estateProperties in newProperties)
+                {
+                    _estateProperties.Add(estateProperties);
+                }
+                GetDollarAmount();
+            }           
 
         }
         #endregion
@@ -435,13 +523,11 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             
             _epBusiness = epBusiness;
             _estateProperties = new ObservableCollection<EstateProperties>(epBusiness.AllEstateProperties());
-            foreach (EstateProperties estate in _estateProperties)
-            {
-                estate.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(estate.Price);
-            }
+            GetDollarAmount();
             _selectedProperty = new EstateProperties();
             _workingProperty = new EstateProperties();
             _errors = new ObservableCollection<string>();
+            AddVisible = true;
         }
         #endregion
 
