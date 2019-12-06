@@ -209,6 +209,8 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         /// 
         private void ViewEstate()
         {
+            _errors.Clear();
+
             if (_selectedProperty != null)
             {
                 _workingProperty = new EstateProperties();
@@ -286,6 +288,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         /// </summary>
         private void UpdateEstate()
         {
+            _errors.Clear();
             //OnPropertyChanged("WorkingProperty");
             // Instantiate the validator and save the result
             EstateValidator validator = new EstateValidator();
@@ -306,20 +309,19 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             {
                 if (_selectedProperty.Id == _workingProperty.Id && _selectedProperty != null && _workingProperty != null)
                 {
+                     MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show($"Are you sure you want to Update this entry?", "Update Entry", System.Windows.MessageBoxButton.OKCancel);
 
-                    if (_workingProperty != null)
-                    {
-                        MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show($"Are you sure you want to Update this entry?", "Update Entry", System.Windows.MessageBoxButton.OKCancel);
-
-                        if (messageBoxResult == MessageBoxResult.OK)
-                        {
-                            EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
-                            _epBusiness = epBusiness;
-                            _epBusiness.UpdateEstateProperty(_workingProperty);
-                            ClearEstate();
-                        }
-                    }
-
+                     if(messageBoxResult == MessageBoxResult.OK)
+                     {
+                        EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
+                        _epBusiness = epBusiness;
+                        _epBusiness.UpdateEstateProperty(_workingProperty);
+                        ClearEstate();
+                     }
+                }             
+                else
+                {
+                    MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show($"Please reselect the estate that is shown in the view area?", "OK", System.Windows.MessageBoxButton.OKCancel);
                 }
             }
            
@@ -333,6 +335,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         /// </summary>
         private void AddEstate()
         {
+            _errors.Clear();
             EstateValidator validator = new EstateValidator();
 
             ValidationResult results = validator.Validate(_workingProperty);
@@ -384,6 +387,10 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                     _epBusiness.DeleteEstateProperty(_selectedProperty);
                     ClearEstate();
                 }
+            }
+            else
+            {
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show($"Please reselect the estate that is shown in the view area?", "OK", System.Windows.MessageBoxButton.OKCancel);
             }
            
         }

@@ -11,6 +11,12 @@ using Reel_A_StateData.Models;
 
 namespace Reel_A_State.BusinessLayer
 {
+    /// <summary>
+    /// A portion of this class was borrowed from:
+    /// Tim Corey
+    /// Intro to MongoDB with C# - Learn what NoSQL is, why it is different than SQL and how to use it in C#
+    /// https://www.youtube.com/watch?v=69WBy4MHYUw
+    /// </summary>
     public class MongoCRUD 
     {
         private IMongoDatabase db;

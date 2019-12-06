@@ -74,7 +74,7 @@
         </Style>
         <Style x:Key="LabelStyle" TargetType="Label">
             <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontSize" Value="12"/>
         </Style>
         <Style x:Key="MainLabelStyle" TargetType="Label">
             <Setter Property="Foreground" Value="Black"/>
@@ -145,7 +145,8 @@
                         <Button
                             Content="Search Address:"
                             Style="{StaticResource SearchButtonStyle}"
-                            Command="{Binding Path=SearchAddressCommand}"/>
+                            Command="{Binding Path=SearchAddressCommand}"
+                            Cursor="Hand"/>
                         <TextBox
                             Text="{Binding SearchedAddress, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource TextBoxStyle}"/>
@@ -156,7 +157,8 @@
                         <Button
                             Content="Sort By:"
                             Style="{StaticResource SearchButtonStyle}"
-                            Command="{Binding Path=SortCommand}"/>
+                            Command="{Binding Path=SortCommand}"
+                            Cursor="Hand"/>
                         <ComboBox
                             Width="135"
                             SelectedItem="{Binding SortBy}"
@@ -168,60 +170,8 @@
 
                     </StackPanel>
                 </StackPanel>
-
-                <!--<StackPanel
-                    Orientation="Horizontal">
-
-                    <StackPanel
-                        Margin="20,0,0,0"
-                        Orientation="Vertical">
-                        <Label Content="Sort By:" Style="{StaticResource LabelStyle}"/>
-                        <RadioButton 
-                            Name="RadioButton_PriceSort"
-                            Content="Price"
-                            Style="{StaticResource RadioButtonStyle}"
-                            Command="{Binding Path=SortListByPriceCommand}"/>
-                        <RadioButton 
-                            Name="RadioButton_CitySort"
-                            Content="City"
-                            Style="{StaticResource RadioButtonStyle}"
-                            Command="{Binding Path=SortListByCityCommand}"/>
-                    </StackPanel>
-                    <StackPanel
-                        Grid.Column="1"
-                        Margin="20,30,0,0"
-                        Orientation="Vertical">
-
-                        <RadioButton 
-                            Name="RadioButton_BedroomSort"
-                            Content="Bedrooom"
-                            Style="{StaticResource RadioButtonStyle}"
-                            Command="{Binding Path=SortListByBedroomCommand}"/>
-                        <RadioButton 
-                            Name="RadioButton_ZipSort"
-                            Content="Zip Code"
-                            Style="{StaticResource RadioButtonStyle}"
-                            Command="{Binding Path=SortListByZipCommand}"/>
-                    </StackPanel>
-                    <StackPanel
-                        Grid.Column="2"
-                        Margin="20,30,0,0"
-                        Orientation="Vertical">
-
-                        <RadioButton 
-                            Name="RadioButton_SqrFootSort"
-                            Content="Sqr Feet"
-                            Style="{StaticResource RadioButtonStyle}"
-                            Command="{Binding Path=SortListBySqrFeetCommand}"/>
-                        <RadioButton 
-                            Name="RadioButton_StateSort"
-                            Content="State"
-                            Style="{StaticResource RadioButtonStyle}"
-                            Command="{Binding Path=SortListByStateCommand}"/>
-                    </StackPanel>
-
-                </StackPanel>-->
             </Border>
+            
             <Grid
                     Height="410">
                 <Grid.ColumnDefinitions>
@@ -245,19 +195,23 @@
                                 Orientation="Horizontal">
                                 <Label
                                     Content="{Binding Dollars}"
-                                    Padding="0,5"
+                                    Width="80"
                                     Style="{StaticResource LabelStyle}"/>
                                 <Label
                                     Content="{Binding Address}"
-                                    Width="150"
+                                    Width="120"
                                     Style="{StaticResource LabelStyle}"/>
                                 <Label
                                     Content="{Binding City }"
-                                    Padding="0,5"
+                                    Width="80"
+                                    Style="{StaticResource LabelStyle}"/>
+                                <Label
+                                    Content="{Binding State}"
+                                    Width="25"
                                     Style="{StaticResource LabelStyle}"/>
                                 <Label
                                     Content="{Binding Zipcode}"
-                                    Padding="0,5"
+                                    Width="50"
                                     Style="{StaticResource LabelStyle}"/>
                             </StackPanel>
                         </DataTemplate>
@@ -460,34 +414,40 @@
                         <Button 
                             x:Name="Button_Clear"   
                             Content="Clear"
+                            Cursor="Hand"
                             Style="{StaticResource ButtonStyle}"
                             Command="{Binding Path=ClearEstateCommand}"/>
                         <Button 
                             x:Name="Button_View"   
                             Content="View"
+                            Cursor="Hand"
                             Style="{StaticResource ButtonStyle}"
                             Command="{Binding Path=ViewEstateCommand}"/>
                         <Button 
                             x:Name="Button_Add"   
                             Content="Add"
+                            Cursor="Hand"
                             Style="{StaticResource ButtonStyle}"
                             Command="{Binding Path=AddEstateCommand}"
                             Visibility="{Binding AddVisible, Converter={StaticResource BooleanToVisibility}}"/>
                         <Button 
                             x:Name="Button_Delete"   
                             Content="Delete"
+                            Cursor="Hand"
                             Style="{StaticResource ButtonStyle}"
                             Command="{Binding Path=DeleteEstateCommand}"
                             Visibility="{Binding DeleteVisible, Converter={StaticResource BooleanToVisibility}}"/>
                         <Button 
                             x:Name="Button_Edit"   
                             Content="Update"
+                            Cursor="Hand"
                             Style="{StaticResource ButtonStyle}"
                             Command="{Binding Path=UpdateEstateCommand}"
                             Visibility="{Binding UpdateVisible, Converter={StaticResource BooleanToVisibility}}"/>
                         <Button 
                             x:Name="Button_Quit"   
                             Content="Quit"
+                            Cursor="Hand"
                             Style="{StaticResource ButtonStyle}"
                             Command="{Binding Path=ExitApplication}"/>
                     </StackPanel>

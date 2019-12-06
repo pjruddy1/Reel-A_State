@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace Reel_A_State.DataAccessLayer
 {
+    /// <summary>
+    /// A portion of this class was borrowed from:
+    /// Tim Corey
+    /// Intro to MongoDB with C# - Learn what NoSQL is, why it is different than SQL and how to use it in C#
+    /// https://www.youtube.com/watch?v=69WBy4MHYUw
+    /// </summary>
     public class DataServiceMongo: IDataService
     {
         private IMongoDatabase db;

@@ -24,18 +24,23 @@ namespace Reel_A_State.Validators
                  .NotEmpty().WithMessage("{PropertyName} Can't be Empty")
                  .Length(2, 2).WithMessage("{PropertyName} should be between 2,25 characters");
             RuleFor(p => p.Zipcode).Cascade(CascadeMode.StopOnFirstFailure)
+                .NotEmpty().WithMessage("{PropertyName} Can't be Empty")
                 .LessThan(99999).WithMessage("{PropertyName} Must Be Valid")
                 .GreaterThan(10000).WithMessage("{PropertyName} Must Be Valid");
             RuleFor(p => p.SqrFeet).Cascade(CascadeMode.StopOnFirstFailure)
+                .NotEmpty().WithMessage("{PropertyName} Can't be Empty")
                 .LessThan(99999).WithMessage("{PropertyName} Must Be Between 100-99999")
                 .GreaterThan(100).WithMessage("{PropertyName} Must Be Between 100-99999");
             RuleFor(p => p.Price).Cascade(CascadeMode.StopOnFirstFailure)
+                .NotEmpty().WithMessage("{PropertyName} Can't be Empty")
                 .LessThan(9999999999).WithMessage("{PropertyName} Must Be Between 100-9999999999")
                 .GreaterThan(100).WithMessage("{PropertyName} Must Be Between 100-9999999999");
             RuleFor(p => p.Bedrooms).Cascade(CascadeMode.StopOnFirstFailure)
+                .NotEmpty().WithMessage("{PropertyName} Can't be Empty")
                 .LessThan(100).WithMessage("{PropertyName} Must Be Between 0-100")
                 .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} Must Be Between 0-100");
             RuleFor(p => p.Bathrooms).Cascade(CascadeMode.StopOnFirstFailure)
+                .NotEmpty().WithMessage("{PropertyName} Can't be Empty")
                 .LessThan(100).WithMessage("{PropertyName} Must Be Between 0-100")
                 .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} Must Be Between 0-100");
             RuleFor(p => p.Fireplace).Cascade(CascadeMode.StopOnFirstFailure)
