@@ -56,9 +56,9 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         {
             get { return new DelegateCommand(SortListByZip); }
         }
-        public ICommand SortListByAcresCommand
+        public ICommand SortCommand
         {
-            get { return new DelegateCommand(SortListByState); }
+            get { return new DelegateCommand(Sort); }
         }
         public ICommand ViewEstateCommand
         {
@@ -86,6 +86,20 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         private bool _deleteVisible;
         private bool _updateVisible;
         private bool _addVisible;
+        private string _sortBy;
+        private ObservableCollection<string> _sortList;
+
+        public ObservableCollection<string> SortList
+        {
+            get { return _sortList; }
+            set 
+            { 
+                _sortList = value;
+            }
+        }
+
+
+
         #endregion
 
         #region Properties
@@ -102,7 +116,6 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 OnPropertyChanged("SelectedProperty");
             }
         }
-
 
         public ObservableCollection<EstateProperties> EstateProperties
         {
@@ -165,12 +178,21 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 OnPropertyChanged("AddVisible");
             }
         }
+        public string SortBy
+        {
+            get { return _sortBy; }
+            set
+            {
+                _sortBy = value;
+                OnPropertyChanged("SortBy");
+            }
+        }
         #endregion
 
         #region Methods
-       /// <summary>
-       /// Leaves application
-       /// </summary>
+        /// <summary>
+        /// Leaves application
+        /// </summary>
         private void QuitApplication()
         {
             MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show($"Are you sure you want to Exit?", "Exit", System.Windows.MessageBoxButton.OKCancel);
@@ -220,7 +242,6 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
             _epBusiness = epBusiness;
             _estateProperties = new ObservableCollection<EstateProperties>(epBusiness.AllEstateProperties());
-
             
             OnPropertyChanged("EstateProperties");
             GetDollarAmount();
@@ -244,6 +265,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             DeleteVisible = false;
             UpdateVisible = false;
             AddVisible = true;
+            _errors.Clear();
         }
 
 
@@ -264,7 +286,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         /// </summary>
         private void UpdateEstate()
         {
-            OnPropertyChanged("WorkingProperty");
+            //OnPropertyChanged("WorkingProperty");
             // Instantiate the validator and save the result
             EstateValidator validator = new EstateValidator();
             ValidationResult results = validator.Validate(_workingProperty);
@@ -280,30 +302,27 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                 }
             }
             // if no errors call the CRUD operations update method
-            if (_selectedProperty.Id == _workingProperty.Id && _selectedProperty != null && _workingProperty != null)            
-            {               
-
-                if (_workingProperty != null)
+            else
+            {
+                if (_selectedProperty.Id == _workingProperty.Id && _selectedProperty != null && _workingProperty != null)
                 {
-                    MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show($"Are you sure you want to Update this entry?", "Update Entry", System.Windows.MessageBoxButton.OKCancel);
 
-                    if (messageBoxResult == MessageBoxResult.OK)
+                    if (_workingProperty != null)
                     {
-                        //_selectedProperty = _workingProperty;
-                        EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
-                        _epBusiness = epBusiness;
-                        _epBusiness.UpdateEstateProperty(_workingProperty);
-                        _estateProperties.Remove(_selectedProperty);
-                        _workingProperty.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(_workingProperty.Price);
-                        _estateProperties.Add(_workingProperty);
+                        MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show($"Are you sure you want to Update this entry?", "Update Entry", System.Windows.MessageBoxButton.OKCancel);
 
-
-                        _errors = new ObservableCollection<string>();
-                        OnPropertyChanged("Errors");
+                        if (messageBoxResult == MessageBoxResult.OK)
+                        {
+                            EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
+                            _epBusiness = epBusiness;
+                            _epBusiness.UpdateEstateProperty(_workingProperty);
+                            ClearEstate();
+                        }
                     }
+
                 }
-                
             }
+           
                 
         }
 
@@ -339,12 +358,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                         EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
                         _epBusiness = epBusiness;
                         _epBusiness.AddEstateProperty(_workingProperty);
-
-                        _workingProperty.Dollars = Reel_A_StateData.Models.EstateProperties.GetDollarAmount(_workingProperty.Price);
-                        _estateProperties.Add(_workingProperty);
-
-                        _errors = new ObservableCollection<string>();
-                        OnPropertyChanged("Errors");
+                        ClearEstate();
                     }
                 }               
                
@@ -359,7 +373,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         /// </summary>
         private void DeleteEstate()
         {
-            if (_selectedProperty != null)
+            if (_selectedProperty != null && _selectedProperty.Id == _workingProperty.Id)
             {
                 MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show($"Are you sure you want to delete this entry?", "Delete Entry", System.Windows.MessageBoxButton.OKCancel);
 
@@ -368,10 +382,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
                     EstatePropertiesBusiness epBusiness = new EstatePropertiesBusiness();
                     _epBusiness = epBusiness;
                     _epBusiness.DeleteEstateProperty(_selectedProperty);
-
-                    //db = new MongoCRUD("PropertyDB");
-                    //db.DeleteEstate("Estates", _selectedProperty.Id, _selectedProperty);
-                    _estateProperties.Remove(_selectedProperty);
+                    ClearEstate();
                 }
             }
            
@@ -381,6 +392,7 @@ namespace Reel_A_StateWpfPresentation.ViewModels
         /// <summary>
         /// Sorts the list by state
         /// </summary>
+        /// 
         private void SortListByState()
         {
             ObservableCollection<EstateProperties> newProperties = new ObservableCollection<EstateProperties>(_estateProperties.OrderBy(x => x.State));
@@ -391,6 +403,39 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             foreach (EstateProperties estateProperties in newProperties)
             {
                 _estateProperties.Add(estateProperties);
+            }
+        }
+
+        /// <summary>
+        /// switch statement that chooses which property to sort by
+        /// </summary>
+        private void Sort()
+        {
+            if (SortBy != null)
+            {
+                switch (SortBy)
+                {
+                    case "Price":
+                        SortListByPrice();
+                        break;
+                    case "City":
+                        SortListByCity();
+                        break;
+                    case "Zip":
+                        SortListByZip();
+                        break;
+                    case "Bedroom":
+                        SortListByBedroom();
+                        break;
+                    case "SqrFeet":
+                        SortListBySqrFeet();
+                        break;
+                    case "State":
+                        SortListByState();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -528,6 +573,10 @@ namespace Reel_A_StateWpfPresentation.ViewModels
             _workingProperty = new EstateProperties();
             _errors = new ObservableCollection<string>();
             AddVisible = true;
+            SortList = new ObservableCollection<string>()
+            {
+                "Price","City","Zip","Bedrooms","SqrFeet","State"
+            };
         }
         #endregion
 

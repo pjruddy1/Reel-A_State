@@ -13,7 +13,7 @@
         WindowStyle="None"
         WindowStartupLocation="CenterScreen">
 
-   
+
 
     <Window.Resources>
         <ControlTemplate x:Key="errorTemplate">
@@ -43,7 +43,7 @@
         <Style x:Key="ErrorBorderStyle" TargetType="Border">
             <Setter Property="BorderBrush" Value="Red"/>
             <Setter Property="BorderThickness" Value="3"/>
-            
+
         </Style>
         <Style x:Key="HeaderStyle" TargetType="Label">
             <Setter Property="Foreground" Value="DarkBlue"/>
@@ -106,7 +106,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
+
     </Window.Resources>
 
     <Grid>
@@ -122,21 +122,7 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="1"
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Left"
-            Margin="20,0,0,10"
-            Orientation="Horizontal">
-            <Button
-                Content="Search Address:"
-                Style="{StaticResource SearchButtonStyle}"
-                Command="{Binding Path=SearchAddressCommand}"/>
-            <TextBox
-                Text="{Binding SearchedAddress, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"
-                Style="{StaticResource TextBoxStyle}"/>
-        </StackPanel>
+        
         <Label
             Grid.Row="1"
             Grid.Column="0"
@@ -144,85 +130,115 @@
             Style="{StaticResource HeaderStyle}"
             HorizontalAlignment="Center"
             Content="Reel A State"/>
-        
+
         <StackPanel
             Grid.Column="1"
             Grid.Row="2"
             Orientation="Vertical">
             <Border Style="{StaticResource InsideBorderStyle}">
-                <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-               
                 <StackPanel
-                        Grid.Column="0"
+                    HorizontalAlignment="Center"
+                    Margin="10,0,0,0">
+                    <StackPanel
+                        Margin="0,5,0,5"
+                        Orientation="Horizontal">
+                        <Button
+                            Content="Search Address:"
+                            Style="{StaticResource SearchButtonStyle}"
+                            Command="{Binding Path=SearchAddressCommand}"/>
+                        <TextBox
+                            Text="{Binding SearchedAddress, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Margin="0,0,0,5">
+                        <Button
+                            Content="Sort By:"
+                            Style="{StaticResource SearchButtonStyle}"
+                            Command="{Binding Path=SortCommand}"/>
+                        <ComboBox
+                            Width="135"
+                            SelectedItem="{Binding SortBy}"
+                            ItemsSource="{Binding SortList}"
+                            VerticalContentAlignment="Center"
+                            HorizontalAlignment="Center">
+                        </ComboBox>
+
+
+                    </StackPanel>
+                </StackPanel>
+
+                <!--<StackPanel
+                    Orientation="Horizontal">
+
+                    <StackPanel
                         Margin="20,0,0,0"
                         Orientation="Vertical">
-                    <Label Content="Sort By:" Style="{StaticResource LabelStyle}"/>
-                    <RadioButton 
+                        <Label Content="Sort By:" Style="{StaticResource LabelStyle}"/>
+                        <RadioButton 
                             Name="RadioButton_PriceSort"
                             Content="Price"
                             Style="{StaticResource RadioButtonStyle}"
                             Command="{Binding Path=SortListByPriceCommand}"/>
-                    <RadioButton 
+                        <RadioButton 
                             Name="RadioButton_CitySort"
                             Content="City"
                             Style="{StaticResource RadioButtonStyle}"
                             Command="{Binding Path=SortListByCityCommand}"/>
-                </StackPanel>
-                <StackPanel
+                    </StackPanel>
+                    <StackPanel
                         Grid.Column="1"
                         Margin="20,30,0,0"
                         Orientation="Vertical">
-                   
-                    <RadioButton 
+
+                        <RadioButton 
                             Name="RadioButton_BedroomSort"
                             Content="Bedrooom"
                             Style="{StaticResource RadioButtonStyle}"
                             Command="{Binding Path=SortListByBedroomCommand}"/>
-                    <RadioButton 
+                        <RadioButton 
                             Name="RadioButton_ZipSort"
                             Content="Zip Code"
                             Style="{StaticResource RadioButtonStyle}"
                             Command="{Binding Path=SortListByZipCommand}"/>
-                </StackPanel>
-                <StackPanel
+                    </StackPanel>
+                    <StackPanel
                         Grid.Column="2"
                         Margin="20,30,0,0"
                         Orientation="Vertical">
 
-                    <RadioButton 
+                        <RadioButton 
                             Name="RadioButton_SqrFootSort"
                             Content="Sqr Feet"
                             Style="{StaticResource RadioButtonStyle}"
                             Command="{Binding Path=SortListBySqrFeetCommand}"/>
-                    <RadioButton 
+                        <RadioButton 
                             Name="RadioButton_StateSort"
                             Content="State"
                             Style="{StaticResource RadioButtonStyle}"
                             Command="{Binding Path=SortListByStateCommand}"/>
-                </StackPanel>
-               
-            </Grid>
+                    </StackPanel>
+
+                </StackPanel>-->
             </Border>
             <Grid
                     Height="410">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
-                    <ColumnDefinition Width="9*"/>
+                    <ColumnDefinition Width="36*"/>
+                    <ColumnDefinition Width="104*"/>
+                    <ColumnDefinition Width="91*"/>
+                    <ColumnDefinition Width="163*"/>
                 </Grid.ColumnDefinitions>
                 <ListBox 
                     x:Name="List"
                     Grid.Column="0"
-                    Margin="10,10,10,10"
+                    Margin="10,10,9.6,10"
                     Background="WhiteSmoke"
                     ItemsSource="{Binding EstateProperties}"
                     SelectedItem="{Binding SelectedProperty, Mode=TwoWay}"
                     IsSynchronizedWithCurrentItem="true"
-                    ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.ColumnSpan="2">
+                    ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.ColumnSpan="4">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel
@@ -230,7 +246,7 @@
                                 <Label
                                     Content="{Binding Dollars}"
                                     Padding="0,5"
-                                    Style="{StaticResource LabelStyle}"/>                                
+                                    Style="{StaticResource LabelStyle}"/>
                                 <Label
                                     Content="{Binding Address}"
                                     Width="150"
@@ -307,7 +323,7 @@
                              
                             Text="{Binding WorkingProperty.Price}"
                             Style="{StaticResource TextBoxStyle}"/>
-                       
+
                     </StackPanel>
                     <StackPanel
                         HorizontalAlignment="Right"
@@ -376,7 +392,7 @@
                     <StackPanel
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
-                        
+
                     </StackPanel>
                     <StackPanel 
                         Margin="0,10,0,0"
@@ -425,7 +441,7 @@
                                 Height="60">
                             </ListBox>
                         </Border>
-                       
+
                     </StackPanel>
                 </StackPanel>
                 <StackPanel
@@ -435,8 +451,8 @@
                     <StackPanel 
                         Orientation="Vertical"
                         HorizontalAlignment="right"
-                        Margin="0,0,25,0">                        
-                        
+                        Margin="0,0,25,0">
+
                     </StackPanel>
                     <StackPanel 
                         Orientation="Horizontal"

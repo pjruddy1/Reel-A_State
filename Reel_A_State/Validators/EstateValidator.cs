@@ -27,21 +27,21 @@ namespace Reel_A_State.Validators
                 .LessThan(99999).WithMessage("{PropertyName} Must Be Valid")
                 .GreaterThan(10000).WithMessage("{PropertyName} Must Be Valid");
             RuleFor(p => p.SqrFeet).Cascade(CascadeMode.StopOnFirstFailure)
-                .LessThan(99999).WithMessage("{PropertyName} Must Be Valid")
-                .GreaterThan(100).WithMessage("{PropertyName} Must Be Valid");
+                .LessThan(99999).WithMessage("{PropertyName} Must Be Between 100-99999")
+                .GreaterThan(100).WithMessage("{PropertyName} Must Be Between 100-99999");
             RuleFor(p => p.Price).Cascade(CascadeMode.StopOnFirstFailure)
-                .LessThan(1000000000).WithMessage("{PropertyName} Must Be Valid")
-                .GreaterThan(100).WithMessage("{PropertyName} Must Be Valid");
+                .LessThan(9999999999).WithMessage("{PropertyName} Must Be Between 100-9999999999")
+                .GreaterThan(100).WithMessage("{PropertyName} Must Be Between 100-9999999999");
             RuleFor(p => p.Bedrooms).Cascade(CascadeMode.StopOnFirstFailure)
-                .LessThan(100).WithMessage("{PropertyName} Must Be Valid")
-                .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} Must Be Valid");
+                .LessThan(100).WithMessage("{PropertyName} Must Be Between 0-100")
+                .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} Must Be Between 0-100");
             RuleFor(p => p.Bathrooms).Cascade(CascadeMode.StopOnFirstFailure)
-                .LessThan(100).WithMessage("{PropertyName} Must Be Valid")
-                .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} Must Be Valid");
+                .LessThan(100).WithMessage("{PropertyName} Must Be Between 0-100")
+                .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} Must Be Between 0-100");
             RuleFor(p => p.Fireplace).Cascade(CascadeMode.StopOnFirstFailure)
-                .NotNull().WithMessage("{PropertyName} Can't be Empty");
+                .NotNull().WithMessage("{PropertyName} Must Be True or False");
             RuleFor(p => p.Pool).Cascade(CascadeMode.StopOnFirstFailure)
-                .NotNull().WithMessage("{PropertyName} Can't be Empty");
+                .NotNull().WithMessage("{PropertyName} Must Be True or False");
         }
 
         #endregion
