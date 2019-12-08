@@ -18,6 +18,15 @@ namespace Reel_A_State.DataAccessLayer
     public class DataServiceMongo: IDataService
     {
         private IMongoDatabase db;
+        private string DBString = "mongodb://PJ123:Longshot1984@propertydb-shard-00-00-tmilp.mongodb.net:27017," +
+            "propertydb-shard-00-01-tmilp.mongodb.net:27017,propertydb-shard-00-02-tmilp.mongodb.net:27017/test?" +
+            "ssl=true&replicaSet=PropertyDB-shard-0&authSource=admin&retryWrites=true&w=majority";
+
+        public DataServiceMongo(string database)
+        {
+            var client = new MongoClient(DBString);
+            db = client.GetDatabase(database);
+        }
 
         public IEnumerable<EstateProperties> ReadAll(string table)
         {
@@ -42,9 +51,9 @@ namespace Reel_A_State.DataAccessLayer
                 var collection = db.GetCollection<T>(table);
                 var filter = Builders<T>.Filter.Eq("_id", id);
                 var update = Builders<T>.Update.Set("Address", estate.Address)
-                                                                .Set("City", estate.City).Set("State", estate.State).Set("Zipcode", estate.Zipcode).Set("Price", estate.Price)
-                                                                .Set("Bathrooms", estate.Bathrooms).Set("Bedrooms", estate.Bedrooms).Set("Pool", estate.Pool).Set("SqrFeet", estate.SqrFeet)
-                                                                .Set("Comment", estate.Comment).Set("Description", estate.Description).Set("Fireplace", estate.Fireplace);
+                    .Set("City", estate.City).Set("State", estate.State).Set("Zipcode", estate.Zipcode).Set("Price", estate.Price)
+                    .Set("Bathrooms", estate.Bathrooms).Set("Bedrooms", estate.Bedrooms).Set("Pool", estate.Pool).Set("SqrFeet", estate.SqrFeet)
+                    .Set("Comment", estate.Comment).Set("Description", estate.Description).Set("Fireplace", estate.Fireplace);
                 collection.UpdateOne(filter, update);
             }
             catch (Exception)
@@ -87,10 +96,6 @@ namespace Reel_A_State.DataAccessLayer
             }
         }
 
-        public DataServiceMongo(string database)
-        {
-            var client = new MongoClient("mongodb://PJ123:Longshot1984@propertydb-shard-00-00-tmilp.mongodb.net:27017,propertydb-shard-00-01-tmilp.mongodb.net:27017,propertydb-shard-00-02-tmilp.mongodb.net:27017/test?ssl=true&replicaSet=PropertyDB-shard-0&authSource=admin&retryWrites=true&w=majority");
-            db = client.GetDatabase(database);
-        }
+        
     }
 }
